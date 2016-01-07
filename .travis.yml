@@ -55,7 +55,8 @@ script:
 after_failure:
   - sudo service fail2ban status
   - sudo fail2ban-client status
-  - cat /etc/fail2ban/fail2ban.local
+  - sudo which fail2ban-client status
+  - sudo cat /etc/fail2ban/fail2ban.local
   - ansible -i 127.0.0.1, -m setup all -c local
 
 
