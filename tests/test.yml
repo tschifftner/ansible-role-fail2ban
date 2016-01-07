@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    fail2ban_jails:
+      - name: ssh
+        enabled: 'true'
+
+      - name: 'ssh-dos'
+        enabled: true
+
+      - name: 'pam-generic'
+        enabled: true
+
+
+  roles:
+    - ansible-role-fail2ban

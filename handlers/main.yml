@@ -1,0 +1,27 @@
+---
+- name: reload systemd
+  command: systemctl daemon-reload
+
+- name: start fail2ban
+  notify: check fail2ban configuration
+  service:
+    name: 'fail2ban'
+    state: started
+    enabled: yes
+
+- name: restart fail2ban
+  notify: check fail2ban configuration
+  service:
+    name: 'fail2ban'
+    state: restarted
+    enabled: yes
+
+- name: reload fail2ban-jails
+  shell: fail2ban-client reload
+#  shell: type fail2ban-server > /dev/null && (fail2ban-client ping > /dev/null && fail2ban-client reload > /dev/null || true) || true
+
+- name: check fail2ban configuration
+  shell: "fail2ban-client status | grep '|- Number of jail:      {{ fail2ban_jails_flat | length }}'"
+  failed_when: true
+  ignore_errors: true
+  when: "{{ fail2ban_jails_flat | length > 0 }}"

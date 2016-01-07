@@ -1,0 +1,55 @@
+---
+language: python
+python: "2.7"
+sudo: required
+
+env:
+  - SITE=test.yml ANSIBLE_VERSION=1.8
+  - SITE=test.yml ANSIBLE_VERSION=1.9.4
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y curl
+  - pip install --upgrade pip
+
+install:
+  # Install Ansible.
+  - pip install ansible==$ANSIBLE_VERSION
+
+  # Add ansible.cfg to pick up roles path.
+  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
+
+  # Install ansible-lint
+  - pip install ansible-lint
+
+script:
+  # Check the role/playbook's syntax.
+  - "ansible-playbook -i tests/inventory tests/$SITE --syntax-check"
+
+  # Run the role/playbook with ansible-playbook.
+  - "ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo"
+
+  # Run the role/playbook again, checking to make sure it's idempotent.
+  - >
+    ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # ansible-lint checks for best practice
+  - ansible-lint tests/$SITE
+
+  # Make sure fail2ban is installed.
+  - >
+    fail2ban-client status | grep 'Number of jail:'
+    && (echo 'fail2ban is installed' && exit 0)
+    || (echo 'fail2ban is not installed' && exit 1)
+
+  # Make sure fail2ban is installed.
+  - >
+    fail2ban-client status | grep ssh
+    && (echo 'fail2ban has jails installed' && exit 0)
+    || (echo 'fail2ban is no jails installed' && exit 1)
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

@@ -1,0 +1,77 @@
+---
+- set_fact:
+    fail2ban_install_version: "{{ fail2ban_download_url | basename | replace('.tar.gz', '') }}"
+    fail2ban_current_version: ''
+
+- name: Get current fail2ban version
+  shell: fail2ban-client --version
+  register: fail2ban_current_version_output
+  changed_when: false
+  ignore_errors: true
+
+- set_fact:
+    fail2ban_current_version: "{{ fail2ban_current_version_output.stdout_lines[0] | replace('Fail2Ban v', '') }}"
+  when: fail2ban_current_version_output.stdout_lines[0] is defined
+
+- name: Install required packages
+  apt:
+    name: '{{ item }}'
+    state: 'present'
+    install_recommends: false
+  with_items: fail2ban_apt_packages
+
+- name: 'Create fail2ban workspace'
+  file:
+    path: "{{ fail2ban_workspace }}"
+    state: directory
+  when: fail2ban_install_version != fail2ban_current_version
+
+- name: 'Download fail2ban.tar.gz'
+  get_url:
+    url: "{{ fail2ban_download_url }}"
+    dest: "{{ fail2ban_workspace }}/{{ fail2ban_download_url | basename }}"
+  when: fail2ban_install_version != fail2ban_current_version
+
+- name: 'Unarchive fail2ban.tar.gz'
+  unarchive:
+    src: "{{ fail2ban_workspace }}/{{ fail2ban_download_url | basename }}"
+    dest: "{{ fail2ban_workspace }}"
+    copy: no
+  when: fail2ban_install_version != fail2ban_current_version
+
+- name: 'Install fail2ban'
+  shell: python setup.py install
+  args:
+    chdir: "{{ fail2ban_workspace }}/fail2ban-{{ fail2ban_install_version }}"
+    creates: /usr/bin/fail2ban-client
+  notify: start fail2ban
+  when: fail2ban_install_version != fail2ban_current_version
+
+- name: 'Set permissions on init script'
+  copy:
+    src: startup/fail2ban.initd
+    dest: /etc/init.d/fail2ban
+    owner: root
+    group: root
+    mode: 0751
+  when: ansible_distribution == 'Ubuntu'
+
+- name: 'Set permissions on systemd unit file'
+  copy:
+    src: startup/fail2ban.service
+    dest: /lib/systemd/system/fail2ban.service
+    owner: root
+    group: root
+    mode: 0751
+  notify: reload systemd
+  when: ansible_distribution == 'Debian'
+
+- name: 'Fail if fail2ban does not exist'
+  shell: fail2ban-client --version
+  changed_when: false
+
+- name: start fail2ban
+  service:
+    name: 'fail2ban'
+    state: started
+    enabled: yes
