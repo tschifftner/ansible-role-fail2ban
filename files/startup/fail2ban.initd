@@ -18,7 +18,7 @@
 # Modified: by Glenn Aaldering <glenn@openvideo.nl>
 #  added exit codes for status command
 #
-PATH=/usr/sbin:/usr/bin:/sbin:/bin
+PATH=/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/bin
 DESC="authentication failure monitor"
 NAME=fail2ban
 

@@ -5,6 +5,5 @@ fail2ban_workspace: '/opt'
 fail2ban_jail_dir: '/etc/fail2ban/jail.d'
 
 fail2ban_apt_packages:
-#  - fail2ban
   - whois
   - iptables-persistent

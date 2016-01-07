@@ -4,15 +4,20 @@
 
   vars:
     fail2ban_jails:
-      - name: ssh
-        enabled: 'true'
-
-      - name: 'ssh-dos'
+      - name: 'ssh'
         enabled: true
+        port: ssh
+        filter: sshd
+        logpath: /var/log/auth.log
+        maxretry: 3
 
-      - name: 'pam-generic'
+      - name: 'ssh-ddos'
         enabled: true
-
+        port: ssh
+        bantime: 86400
+        filter: 'sshd-ddos'
+        logpath: /var/log/auth.log
+        maxretry: 6
 
   roles:
     - ansible-role-fail2ban
