@@ -56,6 +56,16 @@
     mode: 0751
   when: ansible_distribution == 'Ubuntu'
 
+- name: 'Set upstart script'
+  copy:
+    src: startup/fail2ban.upstart
+    dest: /etc/init/fail2ban.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: reload initctl
+  when: ansible_distribution == 'Ubuntu'
+
 - name: 'Set permissions on systemd unit file'
   copy:
     src: startup/fail2ban.service
