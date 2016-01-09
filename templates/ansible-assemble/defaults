@@ -1,6 +1,5 @@
 # {{ ansible_managed }}
 
-
 # Default variables
 # =================
 
@@ -22,12 +21,15 @@ protocol       = {{ fail2ban_protocol }}
 chain          = {{ fail2ban_chain }}
 position       = {{ fail2ban_position }}
 
+# Default actions
 {% if fail2ban_default_actions is defined and fail2ban_default_actions %}
 {% for name, commands in fail2ban_default_actions.iteritems() %}
 {{ "%-14s" | format(name) }} = {{ commands | indent(17) }}
 
 {% endfor %}
 {% endif %}
+
+# Custom actions
 {% if fail2ban_custom_actions is defined and fail2ban_custom_actions %}
 {% for name, commands in fail2ban_custom_actions.iteritems() %}
 {{ "%-14s" | format(name) }} = {{ commands | indent(17) }}

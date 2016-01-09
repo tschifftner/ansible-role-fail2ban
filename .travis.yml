@@ -42,13 +42,13 @@ script:
 
   # Make sure fail2ban is installed.
   - >
-    fail2ban-client status | grep 'Number of jail:'
+    sudo fail2ban-client status | grep 'Number of jail:'
     && (echo 'fail2ban is installed' && exit 0)
     || (echo 'fail2ban is not installed' && exit 1)
 
   # Make sure fail2ban is installed.
   - >
-    fail2ban-client status | grep ssh
+    sudo fail2ban-client status | grep ssh
     && (echo 'fail2ban has jails installed' && exit 0)
     || (echo 'fail2ban is no jails installed' && exit 1)
 

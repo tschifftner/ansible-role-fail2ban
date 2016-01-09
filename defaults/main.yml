@@ -83,16 +83,18 @@ fail2ban_action: 'action_'
 fail2ban_default_actions:
 
   # Block an IP address in the firewall
-  'action_': |
+  action_: |
     %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s", position="%(position)s", bantime="%(bantime)s"]
+
   # Block an IP address in the firewall and send a notification about the
   # offender taken from ``whois``
-  'action_mw': |
+  action_mw: |
     %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s", position="%(position)s", bantime="%(bantime)s"]
     %(mta)s-whois[name=%(__name__)s, dest="%(destemail)s", protocol="%(protocol)s", chain="%(chain)s"]
+
   # Block an IP address in the firewall and send a notification about the
   # offender taken from ``whois`` and relevant log entries
-  'action_mwl': |
+  action_mwl: |
     %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s", position="%(position)s", bantime="%(bantime)s"]
     %(mta)s-whois-lines[name=%(__name__)s, dest="%(destemail)s", logpath=%(logpath)s, chain="%(chain)s"]
 

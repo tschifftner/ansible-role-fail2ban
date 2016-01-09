@@ -26,7 +26,6 @@
     mode: 0755
 
 - name: Configure jail default variables
-  sudo: true
   template:
     src: 'ansible-assemble/defaults'
     dest: '/etc/fail2ban/.ansible/00_default'
@@ -40,13 +39,14 @@
 - name: 'Get all jail names from file system'
   shell: ls -1 /etc/fail2ban/.ansible/
   register: contents
+  changed_when: false
 
 - name: Remove fail2ban jails if requested
   file:
     path: /etc/fail2ban/.ansible/{{ item }}
     state: absent
   with_items: contents.stdout_lines
-  when: "{{ item not in (fail2ban_jails_flat | selectattr('name', 'string') | map(attribute='name') | list) }}"
+  when: "{{ item not in (fail2ban_jails_flat | selectattr('name', 'string') | map(attribute='name') | list) + ['00_default'] }}"
 
 - name: Remove fail2ban jails if requested
   file:
