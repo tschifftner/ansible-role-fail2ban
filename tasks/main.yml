@@ -1,3 +1,6 @@
 ---
 - include: install.yml
+  tags: ['fail2ban-install']
+
 - include: configure.yml
+  tags: ['fail2ban-configure']

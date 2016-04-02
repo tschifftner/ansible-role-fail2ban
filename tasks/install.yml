@@ -47,13 +47,24 @@
   notify: start fail2ban
   when: fail2ban_install_version != fail2ban_current_version
 
+- name: 'Symlink fail2ban-client'
+  file:
+    src: '/usr/local/bin/fail2ban-client'
+    dest: '/usr/bin/fail2ban-client'
+    state: link
+
+- name: 'Ensure /var/run/fail2ban exists'
+  file:
+    path: '/var/run/fail2ban'
+    state: directory
+
 - name: 'Set permissions on init script'
   copy:
     src: startup/fail2ban.initd
     dest: /etc/init.d/fail2ban
     owner: root
     group: root
-    mode: 0751
+    mode: '0751'
   when: ansible_distribution == 'Ubuntu'
 
 - name: 'Set upstart script'
@@ -62,7 +73,7 @@
     dest: /etc/init/fail2ban.conf
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   notify: reload initctl
   when: ansible_distribution == 'Ubuntu'
 
@@ -72,13 +83,18 @@
     dest: /lib/systemd/system/fail2ban.service
     owner: root
     group: root
-    mode: 0751
+    mode: '0751'
   notify: reload systemd
   when: ansible_distribution == 'Debian'
 
 - name: 'Fail if fail2ban does not exist'
   shell: fail2ban-client --version
   changed_when: false
+
+- name: 'Ensure run directory exists'
+  file:
+    path: '/var/run/fail2ban'
+    state: directory
 
 - name: start fail2ban
   service:

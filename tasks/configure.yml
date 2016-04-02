@@ -34,7 +34,7 @@
     mode: 0644
 
 - set_fact:
-    fail2ban_jails_flat: "{{ fail2ban_jails + fail2ban_group_jails + fail2ban_host_jails + fail2ban_dependent_jails }}"
+    _fail2ban_jails_flat: "{{ fail2ban_jails + fail2ban_group_jails + fail2ban_host_jails + fail2ban_dependent_jails }}"
 
 - name: 'Get all jail names from file system'
   shell: ls -1 /etc/fail2ban/.ansible/
@@ -46,13 +46,13 @@
     path: /etc/fail2ban/.ansible/{{ item }}
     state: absent
   with_items: contents.stdout_lines
-  when: "{{ item not in (fail2ban_jails_flat | selectattr('name', 'string') | map(attribute='name') | list) + ['00_default'] }}"
+  when: "{{ item not in (_fail2ban_jails_flat | selectattr('name', 'string') | map(attribute='name') | list) + ['00_default'] }}"
 
 - name: Remove fail2ban jails if requested
   file:
     path: '/etc/fail2ban/.ansible/{{ item.filename | default(item.name) }}'
     state: 'absent'
-  with_items: fail2ban_jails_flat
+  with_items: _fail2ban_jails_flat
   when: ((item.name is defined and item.name) and
          (item.delete is defined and item.delete))
 
@@ -63,7 +63,7 @@
     owner: root
     group: root
     mode: 0640
-  with_items: fail2ban_jails_flat
+  with_items: _fail2ban_jails_flat
   when: ((item.name is defined and item.name) and
          (item.delete is undefined or not item.delete))
 
