@@ -18,7 +18,7 @@
     name: '{{ item }}'
     state: 'present'
     install_recommends: false
-  with_items: fail2ban_apt_packages
+  with_items: '{{ fail2ban_apt_packages }}'
 
 - name: 'Create fail2ban workspace'
   file:

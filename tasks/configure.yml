@@ -45,14 +45,14 @@
   file:
     path: /etc/fail2ban/.ansible/{{ item }}
     state: absent
-  with_items: contents.stdout_lines
+  with_items: '{{ contents.stdout_lines }}'
   when: "{{ item not in (_fail2ban_jails_flat | selectattr('name', 'string') | map(attribute='name') | list) + ['00_default'] }}"
 
 - name: Remove fail2ban jails if requested
   file:
     path: '/etc/fail2ban/.ansible/{{ item.filename | default(item.name) }}'
     state: 'absent'
-  with_items: _fail2ban_jails_flat
+  with_items: '{{ _fail2ban_jails_flat }}'
   when: ((item.name is defined and item.name) and
          (item.delete is defined and item.delete))
 
@@ -63,7 +63,7 @@
     owner: root
     group: root
     mode: 0640
-  with_items: _fail2ban_jails_flat
+  with_items: '{{ _fail2ban_jails_flat }}'
   when: ((item.name is defined and item.name) and
          (item.delete is undefined or not item.delete))
 
