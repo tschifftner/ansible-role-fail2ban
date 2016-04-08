@@ -1,0 +1,13 @@
+/var/log/fail2ban.log {
+    weekly
+    missingok
+    rotate 7
+    size 5M
+    maxage 30
+    notifempty
+    compress
+    delaycompress
+    notifempty
+    create 0600 root root
+    sharedscripts
+}

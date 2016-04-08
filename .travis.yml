@@ -73,6 +73,7 @@ script:
     || (echo 'fail2ban is not installed' && exit 1)
 
 after_failure:
+  - ansible-playbook -i tests/inventory tests/$SITE --connection=local --sudo
   - sudo service fail2ban status
   - sudo fail2ban-client status
   - sudo which fail2ban-client status

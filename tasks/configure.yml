@@ -75,3 +75,11 @@
     group: root
     mode: 0640
   notify: reload fail2ban-jails
+
+- name: 'Set logrotate'
+  copy:
+    src: 'logrotate'
+    dest: /etc/logrotate.d/fail2ban
+    owner: root
+    group: root
+    mode: '0644'

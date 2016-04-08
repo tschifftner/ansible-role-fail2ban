@@ -8,7 +8,7 @@
 
 
 # Log verbosity
-fail2ban_loglevel: 'INFO'
+fail2ban_loglevel: 'ERROR'
 
 
 # Where to save logs: a file, ``STDOUT``, ``STDERR``, ``SYSLOG``
