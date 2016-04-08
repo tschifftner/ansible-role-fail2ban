@@ -101,3 +101,4 @@
     name: 'fail2ban'
     state: started
     enabled: yes
+  changed_when: false
