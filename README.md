@@ -6,7 +6,7 @@ Installs Fail2Ban from source on Debian/Ubuntu linux servers.
 
 ## Requirements
 
-ansible 1.8+
+None
 
 ## Role Variables
 
@@ -63,8 +63,7 @@ $ ansible-galaxy install tschifftner.fail2ban
 ## Supported OS
 Ansible          | Debian Jessie    | Ubuntu 14.04
 :--------------: | :--------------: | :-------------:
-1.8              | Yes              | Yes
-1.9              | Yes              | Yes
+2.1              | Yes              | Yes
 
 ## License
 
@@ -72,4 +71,4 @@ MIT / BSD
 
 ## Author Information
 
- - Tobias Schifftner, @tschifftner
+ - [Tobias Schifftner](https://twitter.com/tschifftner), [ambimax® GmbH](https://www.ambimax.de)
