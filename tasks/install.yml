@@ -43,7 +43,6 @@
   shell: python setup.py install
   args:
     chdir: "{{ fail2ban_workspace }}/fail2ban-{{ fail2ban_install_version }}"
-    creates: /usr/bin/fail2ban-client
   notify: start fail2ban
   when: fail2ban_install_version != fail2ban_current_version
 
@@ -95,10 +94,3 @@
   file:
     path: '/var/run/fail2ban'
     state: directory
-
-- name: start fail2ban
-  service:
-    name: 'fail2ban'
-    state: started
-    enabled: yes
-  changed_when: false

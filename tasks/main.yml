@@ -4,3 +4,10 @@
 
 - include: configure.yml
   tags: ['fail2ban-configure']
+
+- name: start fail2ban
+  service:
+    name: 'fail2ban'
+    state: started
+    enabled: yes
+  changed_when: false

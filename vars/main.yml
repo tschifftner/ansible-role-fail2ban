@@ -1,5 +1,5 @@
 ---
-fail2ban_download_url: 'https://github.com/fail2ban/fail2ban/archive/0.9.3.tar.gz'
+fail2ban_download_url: 'https://github.com/fail2ban/fail2ban/archive/0.9.5.tar.gz'
 fail2ban_workspace: '/opt'
 
 fail2ban_jail_dir: '/etc/fail2ban/jail.d'
