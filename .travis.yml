@@ -35,10 +35,8 @@ script:
 
 
 after_failure:
-  - ${DOCKER} systemctl --no-pager status ntp
-  - ${DOCKER} ntpstat
-  - cat /etc/timezone
-  - readlink /etc/localtime
+  - ${DOCKER} systemctl --no-pager status fail2ban
+  - ${DOCKER} fail2ban-server --version
 
 
 notifications:

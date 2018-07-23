@@ -62,16 +62,6 @@
     path: '/var/run/fail2ban'
     state: directory
 
-- name: 'Set upstart script'
-  copy:
-    src: startup/fail2ban.upstart
-    dest: /etc/init/fail2ban.conf
-    owner: root
-    group: root
-    mode: '0644'
-  notify: reload initctl
-  when: ansible_distribution == 'Ubuntu'
-
 - name: 'Set permissions on systemd unit file'
   copy:
     src: startup/fail2ban.service
@@ -80,7 +70,6 @@
     group: root
     mode: '0751'
   notify: reload systemd
-  when: ansible_distribution == 'Debian'
 
 - name: 'Fail if fail2ban does not exist'
   shell: fail2ban-client --version
