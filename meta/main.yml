@@ -6,14 +6,17 @@ galaxy_info:
   description: Installs fail2ban on Debian/Ubuntu linux servers.
   company: ambimax® GmbH
   license: MIT
-  min_ansible_version: 2.1
+  role_name: datetime
+  min_ansible_version: 2.5
   platforms:
   - name: Debian
     versions:
     - jessie
+    - stretch
   - name: Ubuntu
     versions:
-    - trusty
+    - xenial
+    - bionic
   galaxy_tags:
     - debian
     - ubuntu

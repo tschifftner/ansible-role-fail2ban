@@ -10,8 +10,12 @@
   ignore_errors: true
 
 - set_fact:
-    fail2ban_current_version: "{{ fail2ban_current_version_output.stdout_lines[0] | replace('Fail2Ban v', '') }}"
+    fail2ban_current_version: "{{ fail2ban_current_version_output.stdout_lines[0] | replace('Fail2Ban v', '') | replace('fix', '') }}"
   when: fail2ban_current_version_output.stdout_lines[0] is defined
+
+- name: Debug versions
+  debug:
+    msg: 'Current: {{ fail2ban_current_version }}, Install: {{ fail2ban_install_version }}'
 
 - name: Install required packages
   apt:

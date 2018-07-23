@@ -10,14 +10,16 @@
         filter: sshd
         logpath: /var/log/auth.log
         maxretry: 3
-
-      - name: 'ssh-ddos'
-        enabled: true
-        port: ssh
         bantime: 86400
-        filter: 'sshd-ddos'
-        logpath: /var/log/auth.log
-        maxretry: 6
+
+  pre_tasks:
+    - name: Ensure auth.log file exists
+      copy:
+        dest: /var/log/auth.log
+        content: ''
+        owner: root
+        group: root
+        mode: 0644
 
   roles:
-    - ansible-role-fail2ban
+    - role_under_test
