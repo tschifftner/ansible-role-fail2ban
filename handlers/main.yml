@@ -1,9 +1,8 @@
 ---
-- name: reload systemd
-  command: systemctl daemon-reload
 
-- name: reload initctl
-  command: initctl reload-configuration
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
 
 - name: start fail2ban
   notify: check fail2ban configuration

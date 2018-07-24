@@ -1,6 +1,6 @@
 # Ansible Role: Install Fail2Ban
 
-[![Build Status](https://travis-ci.org/tschifftner/ansible-role-fail2ban.svg)](https://travis-ci.org/tschifftner/ansible-role-fail2ban)
+[![Build Status](https://travis-ci.org/tschifftner/ansible-role-fail2ban.svg?branch=master)](https://travis-ci.org/tschifftner/ansible-role-fail2ban)
 
 Installs Fail2Ban from source on Debian/Ubuntu linux servers.
 
@@ -61,9 +61,19 @@ $ ansible-galaxy install tschifftner.fail2ban
         - { role: tschifftner.fail2ban }
 
 ## Supported OS
-Ansible          | Debian Jessie    | Ubuntu 14.04
-:--------------: | :--------------: | :-------------:
-2.1              | Yes              | Yes
+
+ - Debian 9 (Stretch)
+ - Debian 8 (Jessie)
+ - Ubuntu 18.04 (Bionic Beaver)
+ - Ubuntu 16.04 (Xenial Xerus)
+ 
+## Required ansible version
+
+Ansible 2.5+
+
+## ToDo
+
+ - Support version upgrades
 
 ## License
 

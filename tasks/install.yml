@@ -10,14 +10,19 @@
   ignore_errors: true
 
 - set_fact:
-    fail2ban_current_version: "{{ fail2ban_current_version_output.stdout_lines[0] | replace('Fail2Ban v', '') }}"
+    fail2ban_current_version: "{{ fail2ban_current_version_output.stdout_lines[0] | replace('Fail2Ban v', '') | replace('fix', '') }}"
   when: fail2ban_current_version_output.stdout_lines[0] is defined
+
+- name: Debug versions
+  debug:
+    msg: 'Current: {{ fail2ban_current_version }}, Install: {{ fail2ban_install_version }}'
 
 - name: Install required packages
   apt:
     name: '{{ item }}'
     state: 'present'
     install_recommends: false
+    cache_valid_time: 86400
   with_items: '{{ fail2ban_apt_packages }}'
 
 - name: 'Create fail2ban workspace'
@@ -57,25 +62,6 @@
     path: '/var/run/fail2ban'
     state: directory
 
-- name: 'Set permissions on init script'
-  copy:
-    src: startup/fail2ban.initd
-    dest: /etc/init.d/fail2ban
-    owner: root
-    group: root
-    mode: '0751'
-  when: ansible_distribution == 'Ubuntu'
-
-- name: 'Set upstart script'
-  copy:
-    src: startup/fail2ban.upstart
-    dest: /etc/init/fail2ban.conf
-    owner: root
-    group: root
-    mode: '0644'
-  notify: reload initctl
-  when: ansible_distribution == 'Ubuntu'
-
 - name: 'Set permissions on systemd unit file'
   copy:
     src: startup/fail2ban.service
@@ -84,7 +70,6 @@
     group: root
     mode: '0751'
   notify: reload systemd
-  when: ansible_distribution == 'Debian'
 
 - name: 'Fail if fail2ban does not exist'
   shell: fail2ban-client --version
