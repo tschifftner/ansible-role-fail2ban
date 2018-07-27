@@ -71,10 +71,6 @@ $ ansible-galaxy install tschifftner.fail2ban
 
 Ansible 2.5+
 
-## ToDo
-
- - Support version upgrades
-
 ## License
 
 [MIT License](http://choosealicense.com/licenses/mit/)
